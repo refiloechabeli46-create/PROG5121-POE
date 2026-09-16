@@ -38,10 +38,8 @@ public class PROG5121POE {
         System.out.println(registrationMessage);
 
         // Only proceed to login if registration was fully successful
-        boolean registrationSuccessful = registrationMessage.equals(
-                "Username successfully captured. Password successfully captured. "
-              + "Cell phone number successfully added.");
-
+        boolean registrationSuccessful = login.isRegistered();
+        
         if (registrationSuccessful) {
             System.out.println();
             System.out.println("=== Login ===");

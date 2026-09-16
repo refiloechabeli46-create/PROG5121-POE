@@ -113,6 +113,13 @@ public boolean loginUser(String username, String password) {
 }
 
    /**
+ * Checks whether a user has been successfully registered
+ * (i.e. registerUser() has completed successfully at least once).
+ */
+public boolean isRegistered() {
+    return username != null;
+}
+   /**
  * Returns the welcome message on success, or the failure
  * message otherwise.
  */
