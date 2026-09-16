@@ -118,5 +118,10 @@ public class LoginTest {
         String result = login.returnLoginStatus(false);
         assertEquals("Username or password incorrect, please try again.", result);
     }
+    @Test
+ public void testIsRegisteredAfterSuccessfulRegistration() {
+    login.registerUser("kyl_1", "Ch&&sec@ke99!", "+27838968976", "Kyle", "Naidoo");
+    assertTrue(login.isRegistered());
+}
 }
 
