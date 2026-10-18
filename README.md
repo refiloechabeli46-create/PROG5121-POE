@@ -1,7 +1,7 @@
 Student Name: Refiloe Tsebo Chabeli
 Student Number: ST10528733
 Module Name: PROG5121
-Assignment: POE Part 1
+Assignment: POE Part 2
 
 ## About the Project
 
@@ -33,3 +33,26 @@ As a beginner, the hardest part was understanding how to write code that is not 
 character by character rather than relying on syntax I already knew, and working with regular expressions for the cell phone validation was new to me. Setting up Git properly was also a real challenge - my
 NetBeans project folder was initially separate from my cloned GitHub repository, which meant Git wasn't tracking my files at all until I diagnosed and fixed it. Getting comfortable with JUnit for testing was
 another learning curve, but it taught me the value of automated checks and being able to prove my code works, rather than just assuming it does.
+
+## Part 2: QuickChat Messaging
+
+After a successful login, the user is welcomed to QuickChat and can choose from a menu:
+
+1. Send Messages
+2. Show recently sent messages (Coming Soon)
+3. Quit
+
+### Features
+- The user decides how many messages to enter when the program starts.
+- Each message has a random 10-digit Message ID, a Message Hash, a recipient number and the message text (maximum 250 characters).
+- The recipient number must start with an international code.
+- The user can send a message, disregard it, or store it to send later.
+- Stored messages are saved in a JSON file (messages.json).
+- The total number of messages sent is shown at the end.
+
+### Testing
+- Unit tests are written with JUnit (MessageTest.java).
+- GitHub Actions runs all the tests automatically every time code is pushed.
+
+### How to run
+Open the project in NetBeans and run PROG5121POE.java.
