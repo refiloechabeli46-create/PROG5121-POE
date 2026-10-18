@@ -9,7 +9,17 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Message {
+public class Message {/**
+ * Message class for QuickChat (PROG5121 POE Part 2).
+ * Holds one message: its ID, number, recipient, text and hash,
+ * and can check, send, store and display it.
+ *
+ * Attribution:
+ * - JSON storage uses the Gson library by Google.
+ *   Available at: https://github.com/google/gson (Accessed 18 October 2026).
+ * - Parts of this code were written with help from Claude, an AI assistant by Anthropic.
+ *   Available at: https://claude.ai (Accessed 18 October 2026).
+ */
     private static int totalSent = 0;
     private static final List<Message> sentMessages = new ArrayList<>();
 
@@ -21,8 +31,16 @@ public class Message {
 
     // Makes a message with a random 10-digit ID
     public Message(String recipient, String text, int messageNumber) {
-        this(String.format("%010d", ThreadLocalRandom.current().nextLong(10_000_000_000L)),
-             recipient, text, messageNumber);
+        this(generateMessageId(), recipient, text, messageNumber);
+    }
+
+    // Builds the ID one random digit at a time, using a for loop
+    private static String generateMessageId() {
+        StringBuilder id = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            id.append(ThreadLocalRandom.current().nextInt(10));
+        }
+        return id.toString();
     }
 
     // Makes a message with an ID we choose (for tests)
