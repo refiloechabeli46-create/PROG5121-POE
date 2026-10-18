@@ -9,7 +9,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Message {/**
+    /**
  * Message class for QuickChat (PROG5121 POE Part 2).
  * Holds one message: its ID, number, recipient, text and hash,
  * and can check, send, store and display it.
@@ -20,6 +20,7 @@ public class Message {/**
  * - Parts of this code were written with help from Claude, an AI assistant by Anthropic.
  *   Available at: https://claude.ai (Accessed 18 October 2026).
  */
+public class Message {
     private static int totalSent = 0;
     private static final List<Message> sentMessages = new ArrayList<>();
 
