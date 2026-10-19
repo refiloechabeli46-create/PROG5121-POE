@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.refiloetsebochabeli.poe.prog5121.poe;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,7 +61,7 @@ public class MessageTest {
             "Hi Mike, can you join us for dinner tonight?",
             "Hi Keegan, did you receive the payment?"
         };
-        String[] expected = { "00:0:HITONIGHT", "00:1:HIPAYMENT" };
+        String[] expected = {"00:0:HITONIGHT", "00:1:HIPAYMENT"};
 
         for (int i = 0; i < messages.length; i++) {
             Message m = new Message("0012345678", "+27718693002", messages[i], i);
@@ -83,5 +84,32 @@ public class MessageTest {
         assertEquals("Press 0 to delete the message.", m1.SentMessage(2));
         assertEquals("Message successfully stored.", m1.SentMessage(3));
         assertEquals(1, Message.returnTotalMessages());
+    }
+
+    // Nothing has been sent yet, so the total is 0
+    @Test
+    void totalStartsAtZero() {
+        assertEquals(0, Message.returnTotalMessages());
+    }
+
+    // A message that is disregarded must not be counted
+    @Test
+    void disregardedMessageIsNotCounted() {
+        m1.SentMessage(2);
+        assertEquals(0, Message.returnTotalMessages());
+    }
+
+    // A sent message must show up in the printed list
+    @Test
+    void sentMessageIsPrinted() {
+        m1.SentMessage(1);
+        assertTrue(Message.printMessages().contains("Message ID: 0012345678"));
+    }
+
+    // An ID with more than 10 characters is not allowed
+    @Test
+    void messageIdTooLong() {
+        Message longId = new Message("12345678901", "+27718693002", "Hi there", 0);
+        assertFalse(longId.checkMessageID());
     }
 }
