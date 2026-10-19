@@ -107,6 +107,7 @@ public class PROG5121POE {
 
             String text = askMessageText(scanner);
             Message msg = askRecipient(scanner, text, i);  // i is the message number
+             System.out.println(msg.idGeneratedMessage());
 
             int choice = askSendChoice(scanner);
             System.out.println(msg.SentMessage(choice));
