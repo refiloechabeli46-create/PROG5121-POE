@@ -73,7 +73,7 @@ public class Message {
             return "Message ready to send.";
         }
         int over = text.length() - 250;
-        return "Message exceeds 250 characters by " + over + ", please reduce the size.";
+        return "Message exceeds 250 characters by " + over + "; please reduce the size.";
     }
 
     // Makes the secret code, like 00:0:HITONIGHT
@@ -119,12 +119,22 @@ public class Message {
     public static void resetForTests() {
         totalSent = 0;
         sentMessages.clear();
-    }
+    } 
 
     // Shows one message in the right order
     public String details() {
         return "Message ID: " + messageId + "\nMessage Hash: " + hash
              + "\nRecipient: " + recipient + "\nMessage: " + text;
+    }
+    
+        // Gives back the message ID
+    public String getMessageId() {
+        return messageId;
+    }
+
+    // Says that the ID was made
+    public String idGeneratedMessage() {
+        return "Message ID generated: " + messageId;
     }
 
     // Saves the message into a JSON file

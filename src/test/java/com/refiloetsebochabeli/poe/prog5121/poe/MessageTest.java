@@ -30,7 +30,7 @@ public class MessageTest {
     void messageLengthFailure() {
         String tooLong = "a".repeat(260);
         Message big = new Message("0012345678", "+27718693002", tooLong, 0);
-        assertEquals("Message exceeds 250 characters by 10, please reduce the size.",
+        assertEquals("Message exceeds 250 characters by 10; please reduce the size.",
                 big.checkMessageLength());
     }
 
@@ -75,6 +75,7 @@ public class MessageTest {
         Message m = new Message("+27718693002", "Hello there", 0);
         assertTrue(m.checkMessageID());
         assertTrue(m.details().contains("Message ID: "));
+        assertEquals("Message ID generated: " + m.getMessageId(), m.idGeneratedMessage());
     }
 
     // ---- Send / Disregard / Store ----
