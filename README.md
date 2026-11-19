@@ -41,6 +41,7 @@ After a successful login, the user is welcomed to QuickChat and can choose from 
 1. Send Messages
 2. Show recently sent messages (Coming Soon)
 3. Quit
+4. Stored Messages
 
 ### Features
 - The user decides how many messages to enter when the program starts.
@@ -56,3 +57,32 @@ After a successful login, the user is welcomed to QuickChat and can choose from 
 
 ### How to run
 Open the project in NetBeans and run PROG5121POE.java.
+
+
+## Part 3: Store Data and Display Task
+
+Part 3 adds arrays and a Stored Messages menu (option 4).
+
+### Arrays
+- Sent Messages: all messages that were sent.
+- Disregarded Messages: all messages that were disregarded.
+- Stored Messages: messages read from messages.json when the app starts.
+- Message Hash: all the message hashes.
+- Message ID: all the message IDs.
+
+### Stored Messages menu
+- a) Display the sender and recipient of all stored messages.
+- b) Display the longest stored message.
+- c) Search for a message ID and display the recipient and message.
+- d) Search for all messages for a particular recipient.
+- e) Delete a message using its message hash.
+- f) Display a report of all stored messages.
+
+### Testing
+- MessageTest.java uses the five test messages from the brief.
+- The tests check the Sent array, longest message, message ID search, recipient search, delete by hash and the report.
+- GitHub Actions runs all tests automatically every time code is pushed.
+
+### Attribution
+- JSON reading and writing uses the Gson library by Google: https://github.com/google/gson (Accessed 19 November 2026).
+- Parts of the code were written with help from Claude, an AI assistant by Anthropic: https://claude.ai (Accessed 19 November 2026).
