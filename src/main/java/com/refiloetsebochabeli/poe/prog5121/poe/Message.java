@@ -340,4 +340,23 @@ public static String storedReport() {
     }
     return sb.toString();
 }
+
+// Gives back the text of every disregarded message
+public static List<String> disregardedMessageTexts() {
+    List<String> result = new ArrayList<>();
+    for (Message m : disregardedMessages) {
+        result.add(m.text);
+    }
+    return result;
+}
+
+// How many IDs are in the Message ID box
+public static int messageIdCount() {
+    return messageIds.size();
+}
+
+// How many hashes are in the Message Hash box
+public static int messageHashCount() {
+    return messageHashes.size();
+}
 }
