@@ -153,7 +153,9 @@ void displayLongestMessage() {
 @Test
 void searchForMessageId() {
     loadTestData();
-    assertEquals("It is dinner time!", Message.findById("0000000004").getText());
+    Message found = Message.findById("0000000004");
+    assertEquals("0838884567", found.getRecipient());
+    assertEquals("It is dinner time!", found.getText());
 }
 
 @Test
@@ -173,11 +175,36 @@ void deleteByHash() {
 }
 
 @Test
+void displaySentReport() {
+     loadTestData();
+    String report = Message.printMessages();
+    assertTrue(report.contains(t1.getHash()));
+    assertTrue(report.contains("+27834557896"));
+    assertTrue(report.contains("Did you get the cake?"));
+    assertTrue(report.contains(t4.getHash()));
+    assertTrue(report.contains("0838884567"));
+    assertTrue(report.contains("It is dinner time!"));
+}
+@Test
 void displayReport() {
     loadTestData();
     String report = Message.storedReport();
     assertTrue(report.contains(t2.getHash()));
     assertTrue(report.contains("+27838884567"));
     assertTrue(report.contains("Ok, I am leaving without you."));
+}
+
+@Test
+void disregardedArrayCorrectlyPopulated() {
+    loadTestData();
+    assertEquals(List.of("Yohoooo, I am at your gate."),
+            Message.disregardedMessageTexts());
+}
+
+@Test
+void idAndHashArraysCorrectlyPopulated() {
+    loadTestData();
+    assertEquals(5, Message.messageIdCount());
+    assertEquals(5, Message.messageHashCount());
 }
 }
