@@ -1,7 +1,7 @@
 Student Name: Refiloe Tsebo Chabeli
 Student Number: ST10528733
 Module Name: PROG5121
-Assignment: POE Part 2
+Assignment: POE Part 3
 
 ## About the Project
 
