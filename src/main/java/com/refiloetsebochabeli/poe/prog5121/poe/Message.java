@@ -134,14 +134,14 @@ public class Message {
 
     // Clears everything (used by tests)
     public static void resetForTests() {
-         totalSent = 0;
-         sentMessages.clear();
-         disregardedMessages.clear();
-          storedMessages.clear();
-          messageHashes.clear();
-          messageIds.clear();
-          writeToFile = false;
-}
+        totalSent = 0;
+        sentMessages.clear();
+        disregardedMessages.clear();
+        storedMessages.clear();
+        messageHashes.clear();
+        messageIds.clear();
+        writeToFile = false;
+    }
 
     // Shows one message in the right order
     public String details() {
@@ -159,45 +159,45 @@ public class Message {
         return "Message ID generated: " + messageId;
     }
 
-   // Attribution: Reading messages.json into a list uses the Gson library
+    // Attribution: Reading messages.json into a list uses the Gson library
 // (JsonParser and JsonArray). Available at: https://github.com/google/gson
 // (Accessed 19 November 2026). This method was written with help from
 // Claude, an AI assistant by Anthropic. Available at: https://claude.ai
 // (Accessed 19 November 2026). 
 // Reads messages.json and fills the Stored box
-public static void loadStoredMessages() {
-    storedMessages.clear();
-    Path file = Paths.get("messages.json");
-    if (!Files.exists(file)) {
-        return;
-    }
-    try {
-        JsonArray array = JsonParser.parseString(Files.readString(file)).getAsJsonArray();
-        int count = 1;
-        for (JsonElement item : array) {
-            JsonObject obj = item.getAsJsonObject();
-            int number = obj.has("messageNumber")
-                    ? obj.get("messageNumber").getAsInt() : count;
-            Message m = new Message(
-                    obj.get("messageID").getAsString(),
-                    obj.get("recipient").getAsString(),
-                    obj.get("message").getAsString(),
-                    number);
-            storedMessages.add(m);
-            messageIds.add(m.messageId);
-            messageHashes.add(m.hash);
-            count++;
+    public static void loadStoredMessages() {
+        storedMessages.clear();
+        Path file = Paths.get("messages.json");
+        if (!Files.exists(file)) {
+            return;
         }
-    } catch (IOException e) {
-        System.out.println("Could not read stored messages: " + e.getMessage());
+        try {
+            JsonArray array = JsonParser.parseString(Files.readString(file)).getAsJsonArray();
+            int count = 1;
+            for (JsonElement item : array) {
+                JsonObject obj = item.getAsJsonObject();
+                int number = obj.has("messageNumber")
+                        ? obj.get("messageNumber").getAsInt() : count;
+                Message m = new Message(
+                        obj.get("messageID").getAsString(),
+                        obj.get("recipient").getAsString(),
+                        obj.get("message").getAsString(),
+                        number);
+                storedMessages.add(m);
+                messageIds.add(m.messageId);
+                messageHashes.add(m.hash);
+                count++;
+            }
+        } catch (IOException e) {
+            System.out.println("Could not read stored messages: " + e.getMessage());
+        }
     }
-}
 
 // Saves the message into a JSON file
     public void storeMessage() {
         if (!writeToFile) {
-    return;
-}
+            return;
+        }
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Path file = Paths.get("messages.json");
         try {
@@ -216,147 +216,148 @@ public static void loadStoredMessages() {
             System.out.println("Could not store message: " + e.getMessage());
         }
     }
-  // ---- Small helpers (let other classes read private things) ----
-public String getText() {
-    return text;
-}
+    // ---- Small helpers (let other classes read private things) ----
 
-public String getRecipient() {
-    return recipient;
-}
+    public String getText() {
+        return text;
+    }
 
-public String getHash() {
-    return hash;
-}
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public String getHash() {
+        return hash;
+    }
 
 // Gives back the text of every sent message
-public static List<String> sentMessageTexts() {
-    List<String> result = new ArrayList<>();
-    for (Message m : sentMessages) {
-        result.add(m.text);
+    public static List<String> sentMessageTexts() {
+        List<String> result = new ArrayList<>();
+        for (Message m : sentMessages) {
+            result.add(m.text);
+        }
+        return result;
     }
-    return result;
-}
 
 // a. Sender and recipient of all stored messages
-public static String storedSendersAndRecipients() {
-    if (storedMessages.isEmpty()) {
-        return "There are no stored messages.";
+    public static String storedSendersAndRecipients() {
+        if (storedMessages.isEmpty()) {
+            return "There are no stored messages.";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Message m : storedMessages) {
+            sb.append("Sender: You | Recipient: ").append(m.recipient).append("\n");
+        }
+        return sb.toString();
     }
-    StringBuilder sb = new StringBuilder();
-    for (Message m : storedMessages) {
-        sb.append("Sender: You | Recipient: ").append(m.recipient).append("\n");
-    }
-    return sb.toString();
-}
 
 // b. The longest stored message
-public static String longestStoredMessage() {
-    String longest = "";
-    for (Message m : storedMessages) {
-        if (m.text.length() > longest.length()) {
-            longest = m.text;
+    public static String longestStoredMessage() {
+        String longest = "";
+        for (Message m : storedMessages) {
+            if (m.text.length() > longest.length()) {
+                longest = m.text;
+            }
         }
+        return longest;
     }
-    return longest;
-}  
 
 // c. Find a message by its ID (looks in sent and stored). Gives null if not found.
-public static Message findById(String id) {
-    for (Message m : sentMessages) {
-        if (m.messageId.equals(id)) {
-            return m;
+    public static Message findById(String id) {
+        for (Message m : sentMessages) {
+            if (m.messageId.equals(id)) {
+                return m;
+            }
         }
-    }
-    for (Message m : storedMessages) {
-        if (m.messageId.equals(id)) {
-            return m;
+        for (Message m : storedMessages) {
+            if (m.messageId.equals(id)) {
+                return m;
+            }
         }
+        return null;
     }
-    return null;
-}
 
 // d. All messages (sent or stored) for one recipient
-public static List<String> messagesForRecipient(String number) {
-    List<String> result = new ArrayList<>();
-    for (Message m : sentMessages) {
-        if (m.recipient.equals(number)) {
-            result.add(m.text);
+    public static List<String> messagesForRecipient(String number) {
+        List<String> result = new ArrayList<>();
+        for (Message m : sentMessages) {
+            if (m.recipient.equals(number)) {
+                result.add(m.text);
+            }
         }
-    }
-    for (Message m : storedMessages) {
-        if (m.recipient.equals(number)) {
-            result.add(m.text);
+        for (Message m : storedMessages) {
+            if (m.recipient.equals(number)) {
+                result.add(m.text);
+            }
         }
+        return result;
     }
-    return result;
-}
 
 // e. Delete a stored message using its hash
-public static String deleteByHash(String hashToFind) {
-    for (int i = 0; i < storedMessages.size(); i++) {
-        Message m = storedMessages.get(i);
-        if (m.hash.equals(hashToFind)) {
-            storedMessages.remove(i);
-            messageHashes.remove(m.hash);
-            messageIds.remove(m.messageId);
-            return "Message: \"" + m.text + "\" successfully deleted.";
+    public static String deleteByHash(String hashToFind) {
+        for (int i = 0; i < storedMessages.size(); i++) {
+            Message m = storedMessages.get(i);
+            if (m.hash.equals(hashToFind)) {
+                storedMessages.remove(i);
+                messageHashes.remove(m.hash);
+                messageIds.remove(m.messageId);
+                return "Message: \"" + m.text + "\" successfully deleted.";
+            }
         }
+        return "No stored message has that hash.";
     }
-    return "No stored message has that hash.";
-}
 
 // After a delete, this saves the stored messages into messages.json again
-public static void saveAllStored() {
-    if (!writeToFile) {
-        return;
+    public static void saveAllStored() {
+        if (!writeToFile) {
+            return;
+        }
+        JsonArray array = new JsonArray();
+        for (Message m : storedMessages) {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("messageID", m.messageId);
+            obj.addProperty("messageNumber", m.messageNumber);
+            obj.addProperty("messageHash", m.hash);
+            obj.addProperty("recipient", m.recipient);
+            obj.addProperty("message", m.text);
+            array.add(obj);
+        }
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            Files.writeString(Paths.get("messages.json"), gson.toJson(array));
+        } catch (IOException e) {
+            System.out.println("Could not save messages: " + e.getMessage());
+        }
     }
-    JsonArray array = new JsonArray();
-    for (Message m : storedMessages) {
-        JsonObject obj = new JsonObject();
-        obj.addProperty("messageID", m.messageId);
-        obj.addProperty("messageNumber", m.messageNumber);
-        obj.addProperty("messageHash", m.hash);
-        obj.addProperty("recipient", m.recipient);
-        obj.addProperty("message", m.text);
-        array.add(obj);
-    }
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    try {
-        Files.writeString(Paths.get("messages.json"), gson.toJson(array));
-    } catch (IOException e) {
-        System.out.println("Could not save messages: " + e.getMessage());
-    }
-}
 
 // f. Full report of all stored messages
-public static String storedReport() {
-    if (storedMessages.isEmpty()) {
-        return "There are no stored messages.";
+    public static String storedReport() {
+        if (storedMessages.isEmpty()) {
+            return "There are no stored messages.";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Message m : storedMessages) {
+            sb.append(m.details()).append("\n\n");
+        }
+        return sb.toString();
     }
-    StringBuilder sb = new StringBuilder();
-    for (Message m : storedMessages) {
-        sb.append(m.details()).append("\n\n");
-    }
-    return sb.toString();
-}
 
 // Gives back the text of every disregarded message
-public static List<String> disregardedMessageTexts() {
-    List<String> result = new ArrayList<>();
-    for (Message m : disregardedMessages) {
-        result.add(m.text);
+    public static List<String> disregardedMessageTexts() {
+        List<String> result = new ArrayList<>();
+        for (Message m : disregardedMessages) {
+            result.add(m.text);
+        }
+        return result;
     }
-    return result;
-}
 
 // How many IDs are in the Message ID box
-public static int messageIdCount() {
-    return messageIds.size();
-}
+    public static int messageIdCount() {
+        return messageIds.size();
+    }
 
 // How many hashes are in the Message Hash box
-public static int messageHashCount() {
-    return messageHashes.size();
-}
+    public static int messageHashCount() {
+        return messageHashes.size();
+    }
 }
