@@ -7,6 +7,7 @@ package com.refiloetsebochabeli.poe.prog5121.poe;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 public class MessageTest {
 
@@ -113,4 +114,70 @@ public class MessageTest {
         Message longId = new Message("12345678901", "+27718693002", "Hi there", 0);
         assertFalse(longId.checkMessageID());
     }
+    
+    // ---- Part 3: the 5 test messages from the brief ----
+private final Message t1 = new Message("0000000001", "+27834557896",
+        "Did you get the cake?", 1);
+private final Message t2 = new Message("0000000002", "+27838884567",
+        "Where are you? You are late! I have asked you to be on time.", 2);
+private final Message t3 = new Message("0000000003", "+27834484567",
+        "Yohoooo, I am at your gate.", 3);
+private final Message t4 = new Message("0000000004", "0838884567",
+        "It is dinner time!", 4);
+private final Message t5 = new Message("0000000005", "+27838884567",
+        "Ok, I am leaving without you.", 5);
+
+// Puts each message in the right box: 1 = Sent, 2 = Disregard, 3 = Stored
+private void loadTestData() {
+    t1.SentMessage(1);
+    t2.SentMessage(3);
+    t3.SentMessage(2);
+    t4.SentMessage(1);
+    t5.SentMessage(3);
+} 
+
+@Test
+void sentArrayCorrectlyPopulated() {
+    loadTestData();
+    assertEquals(List.of("Did you get the cake?", "It is dinner time!"),
+            Message.sentMessageTexts());
+}
+
+@Test
+void displayLongestMessage() {
+    loadTestData();
+    assertEquals("Where are you? You are late! I have asked you to be on time.",
+            Message.longestStoredMessage());
+}
+
+@Test
+void searchForMessageId() {
+    loadTestData();
+    assertEquals("It is dinner time!", Message.findById("0000000004").getText());
+}
+
+@Test
+void searchByRecipient() {
+    loadTestData();
+    assertEquals(List.of(
+            "Where are you? You are late! I have asked you to be on time.",
+            "Ok, I am leaving without you."),
+            Message.messagesForRecipient("+27838884567"));
+}
+
+@Test
+void deleteByHash() {
+    loadTestData();
+    assertEquals("Message: \"Where are you? You are late! I have asked you to be on time.\" successfully deleted.",
+            Message.deleteByHash(t2.getHash()));
+}
+
+@Test
+void displayReport() {
+    loadTestData();
+    String report = Message.storedReport();
+    assertTrue(report.contains(t2.getHash()));
+    assertTrue(report.contains("+27838884567"));
+    assertTrue(report.contains("Ok, I am leaving without you."));
+}
 }
