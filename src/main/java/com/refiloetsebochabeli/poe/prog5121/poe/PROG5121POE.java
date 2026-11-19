@@ -147,7 +147,7 @@ public class PROG5121POE {
             System.out.print("Enter your message: ");
             String text = scanner.nextLine();
             if (text.length() <= 250) {
-                System.out.println("Message sent");
+                 
                 return text;
             }
             System.out.println("Please enter a message of less than 250 characters.");
