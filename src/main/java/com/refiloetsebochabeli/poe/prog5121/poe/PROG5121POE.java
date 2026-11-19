@@ -8,6 +8,7 @@ package com.refiloetsebochabeli.poe.prog5121.poe;
  * @author LENOVO
  */
 import java.util.Scanner;
+
 /**
  * Main program for QuickChat: registration, login, then the messaging menu.
  */
@@ -68,6 +69,7 @@ public class PROG5121POE {
         System.out.println("Welcome to QuickChat.");
 
         int limit = askHowManyMessages(scanner);
+        Message.loadStoredMessages();
         boolean messagesEntered = false;
         boolean running = true;
 
@@ -77,6 +79,7 @@ public class PROG5121POE {
             System.out.println("1) Send Messages");
             System.out.println("2) Show recently sent messages");
             System.out.println("3) Quit");
+            System.out.println("4) Stored Messages");
             System.out.print("Choose an option: ");
             String option = scanner.nextLine();
 
@@ -91,8 +94,10 @@ public class PROG5121POE {
                 System.out.println("Coming Soon.");
             } else if (option.equals("3")) {
                 running = false;
+            } else if (option.equals("4")) {
+                runStoredMenu(scanner);
             } else {
-                System.out.println("Please choose 1, 2 or 3.");
+                System.out.println("Please choose 1, 2, 3 or 4.");
             }
         }
 
@@ -107,7 +112,7 @@ public class PROG5121POE {
 
             String text = askMessageText(scanner);
             Message msg = askRecipient(scanner, text, i);  // i is the message number
-             System.out.println(msg.idGeneratedMessage());
+            System.out.println(msg.idGeneratedMessage());
 
             int choice = askSendChoice(scanner);
             System.out.println(msg.SentMessage(choice));
@@ -174,6 +179,73 @@ public class PROG5121POE {
                 return Integer.parseInt(input);
             }
             System.out.println("Please choose 1, 2 or 3.");
+        }
+    }
+
+    // Small menu for stored messages (a to f)
+    private static void runStoredMenu(Scanner scanner) {
+        boolean back = false;
+        while (!back) {
+            System.out.println();
+            System.out.println("--- Stored Messages ---");
+            System.out.println("a) Display sender and recipient of all stored messages");
+            System.out.println("b) Display the longest stored message");
+            System.out.println("c) Search for a message ID");
+            System.out.println("d) Search for all messages for a recipient");
+            System.out.println("e) Delete a message using its hash");
+            System.out.println("f) Display a report of all stored messages");
+            System.out.println("g) Back to main menu");
+            System.out.print("Choose: ");
+            String choice = scanner.nextLine().trim().toLowerCase();
+
+            switch (choice) {
+                case "a":
+                    System.out.println(Message.storedSendersAndRecipients());
+                    break;
+                case "b":
+                    String longest = Message.longestStoredMessage();
+                    if (longest.isEmpty()) {
+                        System.out.println("There are no stored messages.");
+                    } else {
+                        System.out.println("Longest stored message: " + longest);
+                    }
+                    break;
+                case "c":
+                    System.out.print("Enter the message ID: ");
+                    Message found = Message.findById(scanner.nextLine().trim());
+                    if (found == null) {
+                        System.out.println("No message with that ID.");
+                    } else {
+                        System.out.println("Recipient: " + found.getRecipient());
+                        System.out.println("Message: " + found.getText());
+                    }
+                    break;
+                case "d":
+                    System.out.print("Enter the recipient's number: ");
+                    String number = scanner.nextLine().trim();
+                    boolean any = false;
+                    for (String t : Message.messagesForRecipient(number)) {
+                        System.out.println("- " + t);
+                        any = true;
+                    }
+                    if (!any) {
+                        System.out.println("No messages for that recipient.");
+                    }
+                    break;
+                case "e":
+                    System.out.print("Enter the message hash: ");
+                    System.out.println(Message.deleteByHash(scanner.nextLine().trim()));
+                    Message.saveAllStored();
+                    break;
+                case "f":
+                    System.out.println(Message.storedReport());
+                    break;
+                case "g":
+                    back = true;
+                    break;
+                default:
+                    System.out.println("Please choose a, b, c, d, e, f or g.");
+            }
         }
     }
 }
